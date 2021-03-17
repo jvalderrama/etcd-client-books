@@ -24,7 +24,7 @@ For the spring boot books store instead to watch/observe a `single key` we are g
 the `prefix Books` it means `keys` in etcd cluster like `Booksxxxxxxx` for any specific `event`, it means`CREATE, UPDATE 
 and DELETE` events too.
 
-So for our **mgnl instance sample** or even other microservice in charge of this it will be:
+So for our **mgnl instance emulation** or even other microservice in charge of this it will be:
 
 ```
 var watch = kvClient.watch(bs("Books")).asPrefix().start(observer);
@@ -66,7 +66,38 @@ The repo for the client side is:
 - https://github.com/indrabasak/spring-etcd-example (**Client Side endpoints - Rest API**)
 
 
-# Versioning
+# Versioning and rollback
+
+Let's simulate creating the key `client1` in etcd cluster
+
+```
+etcdctl put client1 jsonvalue (Version 1)
+OK
+etcdctl put client1 yamlvalue (Version 2)
+OK
+etcdctl put client1 stringvalue (Version 2)
+OK
+```
+
+Let's check the historical changes for key `client1` in etcd cluster
+```
+etcdctl watch --rev=2 client1
+PUT
+client1
+jsonvalue
+PUT
+client1
+yamlvalue
+PUT
+client1
+stringvalue
+```
+
+For more information and understanding please refer here:
+
+- [Read past version of keys](https://etcd.io/docs/v3.4.0/dev-guide/interacting_v3/#read-past-version-of-keys)
+- [watch-historical-changes-of-keys](https://etcd.io/docs/v3.4.0/dev-guide/interacting_v3/#watch-historical-changes-of-keys)
+
 ## Note: 
 
 To setup a `etcd cluster` for local development just do:
