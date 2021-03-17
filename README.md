@@ -1,9 +1,42 @@
-# Server side for books store: 
-
+# Server side for books store:
 
 ![alt text](images/etcd.png)
 
-**Watcher/Observer etcd events for spring books store:** 
+Verify and run the `Main.tk` class in order to `watch/observe etcd events` for spring boot books store 
+
+Any single `key` in etcd cluster can be watched/observed for any specific `event`, it means`CREATE, UPDATE and DELETE`
+events, so we can watch/observed this single keys for changes in the future to act upon them.
+Even in creation time knowing the `key` that should be created previously. 
+
+**Example**: watch/observe for a single `key` named **loglevel**
+
+```
+kvClient.put(bs("loglevel"), bs("debug")).sync()
+```
+
+Using the etcd client it will be equivalent to:
+
+```
+etcdctl watch loglevel
+```
+
+For the spring boot books store instead to watch/observe a `single key` we are going to watch/observe `multiple keys` starting with
+the `prefix Books` it means `keys` in etcd cluster like `Booksxxxxxxx` for any specific `event`, it means`CREATE, UPDATE 
+and DELETE` events too.
+
+So for our **mgnl instance sample** or even other microservice in charge of this it will be:
+
+```
+var watch = kvClient.watch(bs("Books")).asPrefix().start(observer);
+```
+
+Using the etcd client it will be equivalent to:
+
+```
+etcdctl watch --prefix Books
+```
+
+**Watcher/Observer etcd events for spring books store SDK:** 
 
 It uses the implementation `com.ibm.etcd:etcd-java:0.0.16` library:
 
@@ -33,6 +66,7 @@ The repo for the client side is:
 - https://github.com/indrabasak/spring-etcd-example (**Client Side endpoints - Rest API**)
 
 
+# Versioning
 ## Note: 
 
 To setup a `etcd cluster` for local development just do:
