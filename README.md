@@ -24,7 +24,7 @@ For the spring boot books store instead to watch/observe a `single key` we are g
 the `prefix Books` it means `keys` in etcd cluster like `Booksxxxxxxx` for any specific `event`, it means`CREATE, UPDATE 
 and DELETE` events too.
 
-So for our **mgnl instance emulation** or even other microservice in charge of this it will be:
+So for our **mgnl instance emulation** or even other microservice in charge of this will be:
 
 ```
 var watch = kvClient.watch(bs("Books")).asPrefix().start(observer);
